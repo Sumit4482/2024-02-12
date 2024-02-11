@@ -10,7 +10,7 @@ Welcome to Man Made Database, a command-line tool designed to simplify directory
 
 ## 📝 Overview
 
-The Man Made Database tool is built on Node.js, utilizing the readline and fs modules to interact with the user and perform file system operations. The project is organized into several modules, each responsible for specific functionalities:
+The Man-Made Database tool is built on Node.js, utilizing the readline and fs modules to interact with the user and perform file system operations. The project is organized into several modules, each responsible for specific functionalities:
 
 - **main.js**: The main entry point of the application. It handles user input and delegates tasks to various modules based on the user's selections.
 - **fileOperations.js**: Contains functions for file-related operations such as creating, deleting, and renaming files, as well as reading file contents.
@@ -19,7 +19,7 @@ The Man Made Database tool is built on Node.js, utilizing the readline and fs mo
 
 ## 🚀 Getting Started
 
-To use Man Made Database, follow these steps:
+To use Man-Made Database, follow these steps:
 
 1. Clone the repository to your local machine:
 
@@ -75,4 +75,4 @@ To extend the capabilities of Man Made Database with new functionalities:
 
 ## 📧 Contact
 
-If you have any questions or suggestions, feel free to contact us at [email@example.com](mailto:email@example.com).
+If you have any questions or suggestions, feel free to contact us at [sbanwakde4482@gmail.com](mailto:sbanwakde4482@gmail.com).
