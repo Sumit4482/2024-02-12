@@ -9,7 +9,8 @@ function displayMenu() {
   console.log("8. Update the File Name");
   console.log("9. Create Schema");
   console.log("10. Create Record"); 
-  console.log("11. Update Record Schema"); 
+  console.log("11. Read CSV File");
+  console.log("12. Read Single Data"); 
   console.log("0. Exit");
 }
 

@@ -17,8 +17,10 @@ const { displayMenu } = require("./menu");
 const {
   createRecord,
   createSchema,
+  readCSVFile,
   deleteRecord,
   updateRecord,
+  readRecord,
 } = require("./recordOperations");
 
 const rl = readline.createInterface({
@@ -28,7 +30,7 @@ const rl = readline.createInterface({
 
 function processUserInput() {
   displayMenu();
-  rl.question("Enter your choice: ", (choice) => {
+  rl.question("\nEnter your choice: \n\n", (choice) => {
     switch (choice) {
       case "1":
         rl.question("Enter directory name: ", (answer) => {
@@ -271,7 +273,29 @@ function processUserInput() {
           }
         );
         break;
-      case "0":
+        case "11":
+          // Ask for directory first
+          rl.question("Enter directory path: ", (directoryPath) => {
+            // Ask for file path within the directory
+            rl.question("Enter file name: ", (fileName) => {
+              const filePath = path.join(directoryPath, fileName);
+              readCSVFile(filePath);
+              processUserInput(); // Continue with the menu after displaying the CSV content
+            });
+          });
+          break;
+          case "12":
+            // Read a particular record
+            rl.question("Enter directory name: ", (directoryName) => {
+              rl.question("Enter file name: ", (fileName) => {
+                rl.question("Enter record ID: ", (recordId) => {
+                  readRecord(directoryName, fileName, recordId);
+                  processUserInput();
+                });
+              });
+            });
+            break;
+        case "0":
         rl.close();
         break;
       default:
