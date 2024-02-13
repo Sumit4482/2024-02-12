@@ -6,7 +6,13 @@ const rl = readline.createInterface({
   input: process.stdin,
   output: process.stdout,
 });
-
+/**
+ * Function to create a schema for a CSV file.
+ *
+ * @param {string} directoryPath - The directory path where the file is located.
+ * @param {string} fileName - The name of the CSV file.
+ * @param {string} schema - The schema for the CSV file, separated by commas.
+ */
 function createSchema(directoryPath, fileName, schema) {
   const filePath = path.join(directoryPath, fileName + ".csv");
   const schemaColumns = schema.split(",").map((col) => col.trim());
@@ -29,7 +35,13 @@ function createSchema(directoryPath, fileName, schema) {
     }
   });
 }
-
+/**
+ * Function to create a new record in a CSV file.
+ *
+ * @param {string} directoryPath - The directory path where the file is located.
+ * @param {string} fileName - The name of the CSV file.
+ * @param {string} recordValues - The values of the record, separated by commas.
+ */
 function createRecord(directoryPath, fileName, recordValues) {
   const filePath = path.join(directoryPath, fileName + ".csv");
   const values = recordValues.split(",").map((value) => value.trim());
@@ -70,26 +82,14 @@ function generatePrimaryKey(filePath) {
   // Increment the maximum ID to generate a new primary key
   return maxId + 1;
 }
-
-function deleteRecord(directoryPath, fileName) {
-  const filePath = path.join(directoryPath, fileName + ".csv");
-
-  // Check if the file exists
-  if (!fs.existsSync(filePath)) {
-    console.error("Error: File does not exist.");
-    return;
-  }
-
-  // Delete the file
-  fs.unlink(filePath, (err) => {
-    if (err) {
-      console.error("Error deleting record:", err);
-    } else {
-      console.log("Record deleted successfully.");
-    }
-    // ProcessUserInput not called here
-  });
-}
+/**
+ * Function to update a record in a CSV file.
+ *
+ * @param {string} directoryPath - The directory path where the file is located.
+ * @param {string} fileName - The name of the CSV file.
+ * @param {string} recordId - The ID of the record to update.
+ * @param {string[]} updatedValues - The updated values of the record, separated by commas.
+ */
 
 function updateRecord(directoryPath, fileName, recordId, updatedValues) {
   const filePath = path.join(directoryPath, fileName + ".csv");
@@ -132,7 +132,11 @@ function updateRecord(directoryPath, fileName, recordId, updatedValues) {
     });
   });
 }
-
+/**
+ * Function to read the contents of a CSV file.
+ *
+ * @param {string} filePath - The path of the CSV file.
+ */
 function readCSVFile(filePath) {
   // Read the content of the file
   fs.readFile(filePath, "utf8", (err, data) => {
@@ -183,7 +187,13 @@ function formatTable(table) {
   return formattedTable.join("\n");
 }
 
-
+/**
+ * Function to read a specific record from a CSV file.
+ *
+ * @param {string} directoryPath - The directory path where the file is located.
+ * @param {string} fileName - The name of the CSV file.
+ * @param {string} recordId - The ID of the record to read.
+ */
 function readRecord(directoryPath, fileName, recordId) {
   const filePath = path.join(directoryPath, fileName + ".csv");
 
@@ -215,8 +225,17 @@ function readRecord(directoryPath, fileName, recordId) {
     }
   });
 }
+/**
+ * Function to delete a record from a CSV file.
+ *
+ * @param {string} directoryPath - The directory path where the file is located.
+ * @param {string} fileName - The name of the CSV file.
+ */
 
-
+function deleteRecord(directoryPath, fileName){
+  const filePath = path.join(directoryPath, fileName + ".csv");
+  
+}
 
 module.exports = {
   createRecord,

@@ -1,95 +1,88 @@
-const fs = require('fs');
+const fs = require('fs'); 
 const path = require('path');
-const readline = require('readline'); 
 
-
-function createFile(directory, fileName) {
-  const filePath = path.join(directory, fileName + '.csv');
-  fs.writeFile(filePath, '', (err) => {
-    if (err) {
-      console.error('Error creating file:', err);
-    } else {
-      console.log(`File "${filePath}" created successfully.`);
-    }
-  });
-}
-function deleteFile(filePath, directoryPath, callback) {
-  if (!fs.existsSync(filePath)) {
-    console.error(`File "${filePath}" does not exist.`);
-    callback();
+// Function to create a directory
+function createDirectory(dirPath) {
+  if (fs.existsSync(dirPath)) {
+    console.log(`Directory "${dirPath}" already exists.`); // Print a message if the directory already exists
     return;
   }
 
-  const fileName = path.basename(filePath);
-  
-  // Prompt user to confirm deletion
-  console.log(`Are you sure you want to delete the file "${fileName}" in directory "${directoryPath}"? (yes/no)`);
-  const rl = readline.createInterface({
-    input: process.stdin,
-    output: process.stdout
+  // Create the directory recursively
+  fs.mkdir(dirPath, { recursive: true }, (err) => {
+    if (err) {
+      console.error('Error creating directory:', err); // Log an error message if directory creation fails
+    } else {
+      console.log(`Directory "${dirPath}" created successfully.`); // Log a success message if directory creation succeeds
+    }
   });
+}
 
-  rl.question('> ', (answer) => {
-    if (answer.toLowerCase() === 'yes') {
-      fs.unlink(filePath, (err) => {
-        if (err) {
-          console.error('Error deleting file:', err);
-        } else {
-          console.log(`File "${filePath}" deleted successfully.`);
-        }
-        // Call the callback function to allow further actions
-        callback();
+// Function to check if a directory name is valid
+function isValidDirectoryName(name) {
+  return /^[A-Za-z]/.test(name); // Check if the directory name starts with an alphabet
+}
+
+// Function to update a directory name
+function updateDirectoryName(oldPath, newName) {
+  if (!fs.existsSync(oldPath)) {
+    console.error(`Directory "${oldPath}" does not exist.`); // Log an error if the old directory does not exist
+    return;
+  }
+
+  if (!isValidDirectoryName(newName)) {
+    console.error('Error: New directory name should start with an alphabet.'); // Log an error if the new directory name is invalid
+    return;
+  }
+
+  const newPath = path.join(path.dirname(oldPath), newName); // Generate the new path
+
+  // Rename the directory
+  fs.rename(oldPath, newPath, (err) => {
+    if (err) {
+      console.error('Error renaming directory:', err); // Log an error message if directory renaming fails
+    } else {
+      console.log(`Directory "${oldPath}" renamed to "${newPath}" successfully.`); // Log a success message if directory renaming succeeds
+    }
+  });
+}
+
+// Function to delete a directory
+function deleteDirectory(dirPath) {
+  if (!fs.existsSync(dirPath)) {
+    console.error(`Directory "${dirPath}" does not exist.`); // Log an error if the directory does not exist
+    return;
+  }
+
+  // Delete the directory recursively
+  fs.rmdir(dirPath, { recursive: true }, (err) => {
+    if (err) {
+      console.error('Error deleting directory:', err); // Log an error message if directory deletion fails
+    } else {
+      console.log(`Directory "${dirPath}" deleted successfully.`); // Log a success message if directory deletion succeeds
+    }
+  });
+}
+
+// Function to list the contents of a directory
+function listDirectoryContents(dirPath) {
+  fs.readdir(dirPath, (err, files) => {
+    if (err) {
+      console.error('Error reading directory:', err); // Log an error message if directory reading fails
+    } else {
+      console.log(`Contents of directory "${dirPath}":`); // Log the directory path
+      files.forEach((file) => {
+        console.log(file); // Log each file in the directory
       });
-    } else {
-      console.log('Deletion canceled.');
-      // Call the callback function to allow further actions
-      callback();
     }
   });
 }
 
-function readFileContent(filePath, callback) {
-  fs.readFile(filePath, 'utf8', (err, data) => {
-    if (err) {
-      console.error(`Error reading file "${filePath}":`, err);
-      callback(null);
-    } else {
-      callback(data);
-    }
-  });
-}
-
-function renameFile(directoryPath, oldFileName, newFileName, callback) {
-  const oldFilePath = path.join(directoryPath, oldFileName);
-  const newFilePath = path.join(directoryPath, newFileName);
-  
-  // Check if the file exists
-  if (!fs.existsSync(oldFilePath)) {
-    console.error(`File "${oldFileName}" does not exist in directory "${directoryPath}".`);
-    callback();
-    return;
-  }
-
-  // Get the file extension
-  const extension = path.extname(oldFileName);
-
-  // Construct the new file name with the same extension
-  const newFileNameWithExtension = newFileName + extension;
-
-  // Rename the file
-  fs.rename(oldFilePath, path.join(directoryPath, newFileNameWithExtension), (err) => {
-    if (err) {
-      console.error(`Error renaming file "${oldFileName}" to "${newFileNameWithExtension}":`, err);
-    } else {
-      console.log(`File "${oldFileName}" renamed to "${newFileNameWithExtension}" successfully.`);
-    }
-    callback();
-  });
-}
-
+// Export the functions to make them accessible from other modules
 module.exports = {
-  createFile,
-  deleteFile,
-  readFileContent,
-  renameFile
+  createDirectory,
+  isValidDirectoryName,
+  updateDirectoryName,
+  deleteDirectory,
+  listDirectoryContents
 };

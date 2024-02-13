@@ -28,6 +28,8 @@ const rl = readline.createInterface({
   output: process.stdout,
 });
 
+
+// Function to process user input based on selected menu option
 function processUserInput() {
   displayMenu();
   rl.question("\nEnter your choice: \n\n", (choice) => {
@@ -202,100 +204,76 @@ function processUserInput() {
           "Enter directory name where the file is located: ",
           (dirName) => {
             rl.question("Enter file name: ", (fileName) => {
-              rl.question(
-                "Enter schema in MySQL-like format: ",
-                (schema) => {
-                  const trimmedDirName = dirName.trim();
-                  const trimmedFileName = fileName.trim();
-                  const trimmedSchema = schema.trim();
-                  if (
-                    !trimmedDirName ||
-                    !trimmedFileName ||
-                    !trimmedSchema
-                  ) {
-                    console.error(
-                      "Error: Please enter valid directory name, file name, and schema."
-                    );
-                    processUserInput();
-                    return;
-                  }
-                  const directoryPath = path.join(__dirname, trimmedDirName);
-                  createSchema(
-                    directoryPath,
-                    fileName,
-                    schema
+              rl.question("Enter schema : ", (schema) => {
+                const trimmedDirName = dirName.trim();
+                const trimmedFileName = fileName.trim();
+                const trimmedSchema = schema.trim();
+                if (!trimmedDirName || !trimmedFileName || !trimmedSchema) {
+                  console.error(
+                    "Error: Please enter valid directory name, file name, and schema."
                   );
                   processUserInput();
+                  return;
                 }
-              );
+                const directoryPath = path.join(__dirname, trimmedDirName);
+                createSchema(directoryPath, fileName, schema);
+                processUserInput();
+              });
             });
           }
         );
         break;
       case "10":
-        rl.question(
-          "Enter directory name: ",
-          (dirName) => {
+        rl.question("Enter directory name: ", (dirName) => {
+          rl.question("Enter file name: ", (fileName) => {
             rl.question(
-              "Enter file name: ",
-              (fileName) => {
-                rl.question(
-                  "Enter record values separated by commas: ",
-                  (recordValues) => {
-                    const trimmedDirName = dirName.trim();
-                    const trimmedFileName = fileName.trim();
-                    const trimmedRecordValues = recordValues.trim();
-                    if (
-                      !trimmedDirName ||
-                      !trimmedFileName ||
-                      !trimmedRecordValues
-                    ) {
-                      console.error(
-                        "Error: Please enter valid directory name, file name, and record values."
-                      );
-                      processUserInput();
-                      return;
-                    }
-                    const directoryPath = path.join(
-                      __dirname,
-                      trimmedDirName
-                    );
-                    createRecord(
-                      directoryPath,
-                      fileName,
-                      recordValues
-                    );
-                    processUserInput();
-                  }
-                );
+              "Enter record values separated by commas: ",
+              (recordValues) => {
+                const trimmedDirName = dirName.trim();
+                const trimmedFileName = fileName.trim();
+                const trimmedRecordValues = recordValues.trim();
+                if (
+                  !trimmedDirName ||
+                  !trimmedFileName ||
+                  !trimmedRecordValues
+                ) {
+                  console.error(
+                    "Error: Please enter valid directory name, file name, and record values."
+                  );
+                  processUserInput();
+                  return;
+                }
+                const directoryPath = path.join(__dirname, trimmedDirName);
+                createRecord(directoryPath, fileName, recordValues);
+                processUserInput();
               }
             );
-          }
-        );
+          });
+        });
         break;
-        case "11":
-          // Ask for directory first
-          rl.question("Enter directory path: ", (directoryPath) => {
-            // Ask for file path within the directory
-            rl.question("Enter file name: ", (fileName) => {
-              const filePath = path.join(directoryPath, fileName);
-              readCSVFile(filePath);
-              processUserInput(); // Continue with the menu after displaying the CSV content
+      case "11":
+        // Ask for directory first
+        rl.question("Enter directory path: ", (directoryPath) => {
+          // Ask for file path within the directory
+          rl.question("Enter file name: ", (fileName) => {
+            const filePath = path.join(directoryPath, fileName);
+            readCSVFile(filePath);
+            processUserInput(); // Continue with the menu after displaying the CSV content
+          });
+        });
+        break;
+      case "12":
+        // Read a particular record
+        rl.question("Enter directory name: ", (directoryName) => {
+          rl.question("Enter file name: ", (fileName) => {
+            rl.question("Enter record ID: ", (recordId) => {
+              readRecord(directoryName, fileName, recordId);
+              processUserInput();
             });
           });
-          break;
-          case "12":
-            // Read a particular record
-            rl.question("Enter directory name: ", (directoryName) => {
-              rl.question("Enter file name: ", (fileName) => {
-                rl.question("Enter record ID: ", (recordId) => {
-                  readRecord(directoryName, fileName, recordId);
-                  processUserInput();
-                });
-              });
-            });
-            break;
-        case "0":
+        });
+        break;
+      case "0":
         rl.close();
         break;
       default:
@@ -305,12 +283,11 @@ function processUserInput() {
   });
 }
 
-// displayMenu();
+ // Start processing user input
 processUserInput();
 
-rl.on("close", () => {
+rl.on("close", () => { // Event handler for readline close event
   console.log("Exiting...");
-  process.exit(0);
+  process.exit(0); // Exit the process
 });
-
 
