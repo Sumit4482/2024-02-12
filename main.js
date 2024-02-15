@@ -273,6 +273,32 @@ function processUserInput() {
           });
         });
         break;
+      case "13":
+        // Delete a particular record
+        rl.question("Enter directory name: ", (directoryName) => {
+          rl.question("Enter file name: ", (fileName) => {
+            rl.question("Enter primary key prefix to delete the record: ", (primaryKeyPrefix) => {
+              deleteRecord(directoryName, fileName, primaryKeyPrefix);
+              processUserInput();
+            });
+          });
+        });
+        break;
+
+
+        case "14":
+        // Read a particular record
+        rl.question("Enter directory name: ", (directoryName) => {
+          rl.question("Enter file name: ", (fileName) => {
+            rl.question("Enter record ID: ", (recordId) => {
+              rl.question("Enter Updated Values: ", (updatedValues)=>{
+                updateRecord(directoryName, fileName, recordId, updatedValues);
+                processUserInput();
+              });
+            });
+          });
+        });
+        break;
       case "0":
         rl.close();
         break;

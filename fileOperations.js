@@ -2,7 +2,12 @@ const fs = require('fs');
 const path = require('path');
 const readline = require('readline'); 
 
-
+/**
+ * Function to create a new file.
+ * 
+ * @param {string} directory - The directory where the file will be created.
+ * @param {string} fileName - The name of the file to create.
+ */
 function createFile(directory, fileName) {
   const filePath = path.join(directory, fileName + '.csv');
   fs.writeFile(filePath, '', (err) => {
@@ -13,6 +18,14 @@ function createFile(directory, fileName) {
     }
   });
 }
+
+/**
+ * Function to delete a file.
+ * 
+ * @param {string} filePath - The path of the file to delete.
+ * @param {string} directoryPath - The directory path where the file is located.
+ * @param {Function} callback - A callback function to be called after the file is deleted or deletion is canceled.
+ */
 function deleteFile(filePath, directoryPath, callback) {
   if (!fs.existsSync(filePath)) {
     console.error(`File "${filePath}" does not exist.`);
@@ -48,6 +61,13 @@ function deleteFile(filePath, directoryPath, callback) {
   });
 }
 
+/**
+ * Function to read the content of a file.
+ * 
+ * @param {string} filePath - The path of the file to read.
+ * @param {Function} callback - A callback function to be called with the file content or null if an error occurs.
+ */
+
 function readFileContent(filePath, callback) {
   fs.readFile(filePath, 'utf8', (err, data) => {
     if (err) {
@@ -58,7 +78,14 @@ function readFileContent(filePath, callback) {
     }
   });
 }
-
+/**
+ * Function to rename a file.
+ * 
+ * @param {string} directoryPath - The path of the directory where the file is located.
+ * @param {string} oldFileName - The name of the file to rename.
+ * @param {string} newFileName - The new name for the file.
+ * @param {Function} callback - A callback function to be called after the file is renamed.
+ */
 function renameFile(directoryPath, oldFileName, newFileName, callback) {
   const oldFilePath = path.join(directoryPath, oldFileName);
   const newFilePath = path.join(directoryPath, newFileName);

@@ -1,3 +1,6 @@
+/**
+ * Function to display the menu options.
+ */
 function displayMenu() {
   console.log("1. Create directory");
   console.log("2. Update directory name");
@@ -11,6 +14,7 @@ function displayMenu() {
   console.log("10. Create Record"); 
   console.log("11. Read CSV File");
   console.log("12. Read Single Data"); 
+  console.log("13 Delete Record");
   console.log("0. Exit");
 }
 

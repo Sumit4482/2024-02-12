@@ -64,6 +64,13 @@ function createRecord(directoryPath, fileName, recordValues) {
   console.log("Record written to file successfully.");
 }
 
+
+/**
+ * Function to generate a unique primary key for a new record based on existing records in a CSV file.
+ * 
+ * @param {string} filePath - The path of the CSV file containing existing records.
+ * @returns {number} - The generated primary key for the new record.
+ */
 function generatePrimaryKey(filePath) {
   // Read the existing records to determine the next primary key
   const data = fs.readFileSync(filePath, "utf8");
@@ -110,7 +117,7 @@ function updateRecord(directoryPath, fileName, recordId, updatedValues) {
       const columns = lines[i].split(",");
       if (columns[0] === recordId) {
         // Update the record with updatedValues
-        lines[i] = updatedValues.join(",") + "\n";
+        lines[i] = recordId + ',' + updatedValues + "\n"; // Assuming updatedValues is a string
         found = true;
         break;
       }
@@ -165,6 +172,12 @@ function readCSVFile(filePath) {
   });
 }
 
+/**
+ * Function to format a table with aligned columns.
+ * 
+ * @param {string[][]} table - The table to format, represented as a 2D array of strings.
+ * @returns {string} - The formatted table as a string.
+ */
 function formatTable(table) {
   // Determine maximum width for each column
   const columnWidths = table[0].map((_, colIndex) =>
@@ -232,9 +245,34 @@ function readRecord(directoryPath, fileName, recordId) {
  * @param {string} fileName - The name of the CSV file.
  */
 
-function deleteRecord(directoryPath, fileName){
+function deleteRecord(directoryPath, fileName, primaryKeyPrefix) {
   const filePath = path.join(directoryPath, fileName + ".csv");
-  
+
+  // Check if the file exists
+  if (!fs.existsSync(filePath)) {
+    console.log("File not found.");
+    return;
+  }
+
+  // Read the contents of the file
+  const fileContents = fs.readFileSync(filePath, 'utf8').trim();
+
+  // Split the file contents into lines
+  const lines = fileContents.split('\n');
+
+  // Filter out the record(s) with the given primary key prefix
+  const filteredLines = lines.filter(line => {
+    const primaryKey = line.split(',')[0].charAt(0);
+    return primaryKey !== primaryKeyPrefix;
+  });
+
+  // Join the filtered lines to form the updated content
+  const updatedContent = filteredLines.join('\n');
+
+  // Write the updated content back to the file
+  fs.writeFileSync(filePath, updatedContent);
+
+  console.log("Record(s) with primary key prefix " + primaryKeyPrefix + " deleted successfully.");
 }
 
 module.exports = {

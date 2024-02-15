@@ -1,31 +1,46 @@
 const fs = require('fs');
 const path = require('path'); 
 
-
-
-// Function to create a directory
+/**
+ * Function to create a directory.
+ * 
+ * @param {string} dirPath - The path of the directory to create.
+ * @returns {Promise<void>} - A Promise that resolves when the directory is successfully created, or rejects with an error if the directory already exists or if an error occurs during creation.
+ */
 function createDirectory(dirPath) {
-  if (fs.existsSync(dirPath)) {
-    console.log(`Directory "${dirPath}" already exists.`); // Print a message if the directory already exists
-    return;
-  }
-
-  // Create the directory recursively
-  fs.mkdir(dirPath, { recursive: true }, (err) => {
-    if (err) {
-      console.error('Error creating directory:', err); // Log an error message if directory creation fails
-    } else {
-      console.log(`Directory "${dirPath}" created successfully.`); // Log a success message if directory creation succeeds
+  return new Promise((resolve, reject) => {
+    if (fs.existsSync(dirPath)) {
+      console.log(`Directory "${dirPath}" already exists.`);
+      return reject(new Error("Directory already exists"));
     }
+    fs.mkdir(dirPath, (err) => {
+      if (err) {
+        console.error('Error creating directory:', err);
+        reject(err);
+      } else {
+        console.log(`Directory "${dirPath}" created successfully.`);
+        resolve();
+      }
+    });
   });
 }
 
-// Function to check if a directory name is valid
+/**
+ * Function to check if a directory name is valid.
+ * 
+ * @param {string} name - The directory name to validate.
+ * @returns {boolean} - Returns true if the directory name starts with an alphabet, otherwise returns false.
+ */
 function isValidDirectoryName(name) {
   return /^[A-Za-z]/.test(name); // Check if the directory name starts with an alphabet
 }
 
-// Function to update a directory name
+/**
+ * Function to update the name of a directory.
+ * 
+ * @param {string} oldPath - The current path of the directory.
+ * @param {string} newName - The new name for the directory.
+ */
 function updateDirectoryName(oldPath, newName) {
   if (!fs.existsSync(oldPath)) {
     console.error(`Directory "${oldPath}" does not exist.`); // Log an error if the old directory does not exist
@@ -49,7 +64,12 @@ function updateDirectoryName(oldPath, newName) {
   });
 }
 
-// Function to delete a directory
+/**
+ * Function to delete a directory.
+ * 
+ * @param {string} dirPath - The path of the directory to delete.
+ */
+
 function deleteDirectory(dirPath) {
   if (!fs.existsSync(dirPath)) {
     console.error(`Directory "${dirPath}" does not exist.`); // Log an error if the directory does not exist
@@ -66,7 +86,11 @@ function deleteDirectory(dirPath) {
   });
 }
 
-// Function to list the contents of a directory
+/**
+ * Function to list the contents of a directory.
+ * 
+ * @param {string} dirPath - The path of the directory to list the contents of.
+ */
 function listDirectoryContents(dirPath) {
   fs.readdir(dirPath, (err, files) => {
     if (err) {
